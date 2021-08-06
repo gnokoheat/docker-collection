@@ -1,0 +1,10 @@
+version: "2.1"
+services:
+  transmission:
+    image: gnokoheat/youtube2notion
+    container_name: youtube2notion
+    ports:
+      - 5000:5000/tcp
+    command:
+      - app.py
+    restart: unless-stopped
