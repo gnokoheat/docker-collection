@@ -14,4 +14,5 @@
 Enter a video id:
 Enter a notion page url:
 Enter a notion token v2:
+Enter a text language: ex) ko, ja, de ...
 ```
