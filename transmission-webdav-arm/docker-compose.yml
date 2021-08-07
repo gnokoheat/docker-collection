@@ -1,0 +1,32 @@
+version: "2.1"
+services:
+  transmission:
+    image: linuxserver/transmission
+    container_name: transmission
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Seoul
+      - TRANSMISSION_WEB_HOME=/combustion-release/
+      - USER=username #username
+      - PASS=password #password
+    volumes:
+      - /home/pi/transmission/config:/config
+      - /home/pi/downloads:/downloads
+      - /home/pi/transmission/watch:/watch
+    ports:
+      - 9091:9091 # web ui port
+      - 51413:51413
+      - 51413:51413/udp
+    restart: unless-stopped
+  webdav:
+    image: ugeek/webdav:arm
+    container_name: webdav
+    restart: unless-stopped
+    ports:
+      - 80:80
+    environment:
+      - USERNAME=username #username
+      - PASSWORD=password #password
+    volumes:
+      - /home/pi/downloads/complete:/media
