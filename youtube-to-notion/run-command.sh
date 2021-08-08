@@ -18,4 +18,4 @@ curl --location --request POST 'http://localhost:5000/upload' \
     "notion_page_url": "'${np}'",
     "notion_token_v2": "'${nt}'",
     "text_language": "'${tl}'"
-}' &>> ./log/$NOW.log &
+}' &> ./log/$NOW.log &
