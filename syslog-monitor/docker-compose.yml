@@ -1,0 +1,58 @@
+version: "3"
+
+networks:
+  syslog-monitor:
+
+services:
+  fluent:
+    image: grafana/fluent-plugin-loki:main-33c00ad-amd64
+    container_name: fluent
+    command:
+      - "fluentd"
+      - "-v"
+      - "-p"
+      - "/fluentd/plugins"
+    environment:
+      LOKI_URL: http://loki:3100
+      FLUENT_PORT: 1514 #syslog port
+      TZ: Asia/Seoul #timezone
+    ports:
+      - 1514:1514
+      - 1514:1514/udp
+    volumes:
+      - ./fluent.conf:/fluentd/etc/fluent.conf
+    networks:
+      - syslog-monitor
+    tty: true
+    restart: unless-stopped
+
+  loki:
+    image: grafana/loki:2.4.2
+    container_name: loki
+    user: root
+    ports:
+      - 3100:3100
+    command: -config.file=/etc/loki/loki.yaml
+    volumes:
+      - ./loki:/loki
+      - ./loki.yaml:/etc/loki/loki.yaml
+    networks:
+      - syslog-monitor
+    tty: true
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    user: root
+    ports:
+      - 3000:3000
+    environment:
+      - GF_SECURITY_ADMIN_USER=username #username
+      - GF_SECURITY_ADMIN_PASSWORD=password #password
+    volumes:
+      - ./grafana:/var/lib/grafana
+    networks:
+      - syslog-monitor
+    tty: true
+    restart: unless-stopped
