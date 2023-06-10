@@ -1,0 +1,25 @@
+- name: Check DNS access to 8.8.8.8
+  shell: ping -c 3 8.8.8.8
+  register: dns_check
+  ignore_errors: true
+  changed_when: false
+
+- name: Check Uptime more than 5 min
+  raw: |
+    uptime_output=$(cat /proc/uptime)
+    uptime_seconds=$(echo "$uptime_output" | awk '{print $1}')
+    if awk 'BEGIN{if ('$uptime_seconds' > 300) exit 0; exit 1}'; then
+      exit 0
+    else
+      exit 1
+    fi
+  register: uptime_check
+  ignore_errors: true
+  changed_when: false
+  when: dns_check.rc != 0
+  delegate_to: router1
+
+- name: Reboot Router1 if unable to access DNS
+  raw: reboot
+  when: dns_check.rc != 0 and uptime_check.rc == 0
+  delegate_to: router1
