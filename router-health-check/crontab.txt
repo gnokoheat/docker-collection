@@ -1,0 +1,2 @@
+* * * * * /exec/ansible.sh
+*/30 * * * * /exec/log-rotate.sh

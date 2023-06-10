@@ -1,0 +1,19 @@
+version: "3"
+services:
+  ansible:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ansible:latest
+    container_name: ansible
+    user: root
+    volumes:
+      - /home/user/ansible/config:/etc/ansible/config
+      - /home/user/ansible/policy:/etc/ansible/policy
+    tty: true
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "20m"
+        max-file: "5"

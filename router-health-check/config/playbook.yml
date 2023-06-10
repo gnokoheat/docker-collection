@@ -1,0 +1,8 @@
+- name: Include all policy files
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Include policy files
+      include: "{{ item }}"
+      with_fileglob:
+        - "/etc/ansible/policy/*.yml"
