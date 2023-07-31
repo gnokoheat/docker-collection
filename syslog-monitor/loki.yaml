@@ -24,6 +24,10 @@ schema_config:
         prefix: index_
         period: 24h
 
-table_manager:
-  retention_deletes_enabled: true
-  retention_period: 4380h
+compactor:
+  retention_enabled: true
+  retention_delete_delay: 2h
+  retention_delete_worker_count: 150
+
+limits_config:
+  retention_period: 4320h
