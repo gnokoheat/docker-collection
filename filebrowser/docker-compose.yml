@@ -1,0 +1,16 @@
+version: "2.1"
+services:
+  filebrowser:
+    image: filebrowser/filebrowser:v2-s6
+    container_name: filebrowser
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Seoul
+    volumes:
+      - /home/pi/filebrowser/srv:/srv
+      - /home/pi/filebrowser/filebrowser.db:/database/filebrowser.db
+      - /home/pi/filebrowser/settings.json:/config/settings.json
+    ports:
+      - 8080:80 # web ui port
+    restart: unless-stopped
